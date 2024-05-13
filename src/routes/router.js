@@ -7,10 +7,15 @@ import CursosPageVue from '../pages/CursosPage.vue';
 import BibliotecaPageVue from '../pages/BibliotecaPage.vue';
 import ForumPageVue from '../pages/ForumPage.vue';
 import UsuariosPageVue from '../pages/UsuariosPage.vue';
+import LoginViewVue from '../pages/LoginView.vue';
 
 Vue.use(VueRouter)
 
 const routes = [
+    {
+        path: '/login',
+        component: LoginViewVue
+    },
     {
         path: '/',
         component: HomePage

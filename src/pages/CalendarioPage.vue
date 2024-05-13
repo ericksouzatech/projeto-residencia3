@@ -191,6 +191,7 @@
                               readonly
                               v-bind="attrs"
                               v-on="on"
+                              required
                             ></v-text-field>
                           </template>
                           <v-date-picker
@@ -217,13 +218,13 @@
                         </v-menu>
                       </v-col>
                       <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="eventoEditando.inicio" label="Novo Horário de início"></v-text-field>
+                        <v-text-field v-model="eventoEditando.inicio" label="Novo Horário de início" required></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="eventoEditando.fim" label="Novo Horário de término"></v-text-field>
+                        <v-text-field v-model="eventoEditando.fim" label="Novo Horário de término" required></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="eventoEditando.desc" label="Nova Descrição"></v-text-field>
+                        <v-text-field v-model="eventoEditando.desc" label="Nova Descrição" required></v-text-field>
                       </v-col>
                 </v-row>
               </v-container>
