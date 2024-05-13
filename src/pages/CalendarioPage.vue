@@ -3,7 +3,7 @@
       <v-main>
         <v-app-bar dark>
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-          <v-app-bar-title>Calendário</v-app-bar-title>
+          <v-app-bar-title>Cronograma</v-app-bar-title>
         </v-app-bar>
         <v-navigation-drawer
         v-model="drawer"
@@ -32,7 +32,7 @@
               </v-list-item>
   
               <v-list-item>
-                <v-list-item-title @click="goTo('/calendario')">Calendário</v-list-item-title>
+                <v-list-item-title @click="goTo('/calendario')">Cronograma</v-list-item-title>
               </v-list-item>
   
               <v-list-item>
@@ -229,7 +229,7 @@
               </v-container>
             </v-card-text>
             <v-card-actions>
-              <v-btn color="primary" text @click="excluirEvento(index)">Excluir evento</v-btn>
+              <v-btn color="primary" text @click="excluirEvento">Excluir evento</v-btn>
               <v-spacer></v-spacer>
               <v-btn color="primary" text @click="cancelarEdicao">Cancelar</v-btn>
               <v-btn color="primary" text @click="salvarEdicao">Salvar</v-btn>
@@ -308,14 +308,23 @@
         this.novoEvento = { name: '', date: null, inicio: '', fim: '', desc: '' };
         this.dialog = false;
       },
-      excluirEvento(index) {
-        this.eventos.splice(index, 1)
-        this.dialogEditar = false;
-        this.eventoEditando = { name: '', date: null, inicio: '', fim: '', desc: '' };
+      excluirEvento() {
+        if (confirm("Tem certeza que deseja excluir este evento?")) {
+          this.eventos.splice(this.indexEditado, 1);
+          this.dialogEditar = false;
+          this.eventoEditando = { name: '', date: null, inicio: '', fim: '', desc: '' };
+          this.indexEditado = -1;
+        }
+        else {
+          this.dialogEditar = false;
+          this.eventoEditando = { name: '', date: null, inicio: '', fim: '', desc: '' };
+          this.indexEditado = -1;
+        }
       },  
       editarEvento(evento) {
         this.eventoEditando = { ...evento };
         this.dialogEditar = true;
+        this.indexEditado = this.eventos.indexOf(evento);
       },
       salvarEdicao() {
         this.eventos.splice(this.indexEditado, 1, { ...this.eventoEditando });

@@ -1,5 +1,6 @@
 <template>
     <v-app>
+      <v-main>
         <v-app-bar dark>
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
           <v-app-bar-title>Home</v-app-bar-title>
@@ -31,7 +32,7 @@
               </v-list-item>
   
               <v-list-item>
-                <v-list-item-title @click="goTo('/calendario')">Calendário</v-list-item-title>
+                <v-list-item-title @click="goTo('/calendario')">Cronograma</v-list-item-title>
               </v-list-item>
   
               <v-list-item>
@@ -44,6 +45,10 @@
             </v-list-item-group>
           </v-list>
         </v-navigation-drawer>
+        <div>
+          Seja bem vindo!
+        </div>
+      </v-main>
     </v-app>    
 </template>
 

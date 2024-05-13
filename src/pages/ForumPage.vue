@@ -31,7 +31,7 @@
               </v-list-item>
   
               <v-list-item>
-                <v-list-item-title @click="goTo('/calendario')">Calendário</v-list-item-title>
+                <v-list-item-title @click="goTo('/calendario')">Cronograma</v-list-item-title>
               </v-list-item>
   
               <v-list-item>
