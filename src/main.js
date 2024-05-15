@@ -42,7 +42,34 @@ const store = new Vuex.Store({
         alert(error);
       });
     },
+    checkAuthState({ commit }) {
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          commit('setUser', user);
+        } else {
+          commit('setUser', null);
+          console.log("Método de autenticação chamado")
+        }
+      });
+    },
   },
+  getters: {
+    isAuthenticated: state => !!state.user,
+    currentUser: state => state.user,
+    authError: state => state.error,
+  },
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth) { // Verifica se a rota requer autenticação
+    if (!store.getters.isAuthenticated) { // Verifica se o usuário está autenticado
+      next('/login'); // Redireciona para a tela de login
+    } else {
+      next(); // Continua para a rota protegida
+    }
+  } else {
+    next(); // Continua para rotas públicas
+  }
 });
 
 new Vue({
