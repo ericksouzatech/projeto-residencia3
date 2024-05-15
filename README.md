@@ -1,24 +1,4 @@
-# projeto-residencia3
+# Projeto de residência com a Beyond Company.
 
-## Project setup
-```
-npm install
-```
+Projeto de residência com a Beyond company cujo qual fiquei responsável por<br /> uma tela de cronogramas onde é possível criar, editar e excluir futuros eventos do cronograma.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
