@@ -13,7 +13,7 @@
                             <v-text-field v-model="email" label="Email" required></v-text-field>
                             <v-text-field
                                 v-model="password"
-                                label="Password"
+                                label="Senha"
                                 type="password"
                                 required
                             ></v-text-field>
@@ -47,6 +47,7 @@ export default {
                 this.$router.push('/');
             }).catch(error => {
                 console.error("Erro ao fazer login:", error);
+                alert("Erro ao fazer login. Verifique suas credenciais e tente novamente.");
             });
         },
         createAcc() {

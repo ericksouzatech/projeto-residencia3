@@ -32,15 +32,19 @@ const store = new Vuex.Store({
     },
     //eslint-disable-next-line no-unused-vars
     login({ commit }, payload) {
-      const { email, password } = payload;
-      signInWithEmailAndPassword(auth, email, password)
-      .then((result) => {
-        console.log("usuário logado!", result);
-        commit("setUser", result.user);
-      })
-      .catch((error) => {
-        alert(error);
-      });
+        const { email, password } = payload;
+        return new Promise((resolve, reject) => {
+            signInWithEmailAndPassword(auth, email, password)
+            .then((result) => {
+                console.log("usuário logado!", result);
+                commit("setUser", result.user);
+                resolve(result);
+            })
+            .catch((error) => {
+                console.error("Erro ao fazer login:", error);
+                reject(error);
+            });
+        });
     },
     checkAuthState({ commit }) {
       auth.onAuthStateChanged(user => {
@@ -61,14 +65,16 @@ const store = new Vuex.Store({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth) { // Verifica se a rota requer autenticação
-    if (!store.getters.isAuthenticated) { // Verifica se o usuário está autenticado
-      next('/login'); // Redireciona para a tela de login
+  if (to.meta.requiresAuth) {
+    store.dispatch('checkAuthState').then(() => {
+      if (!store.getters.isAuthenticated) { 
+      next('/login');
     } else {
-      next(); // Continua para a rota protegida
+      next();
     }
+  });
   } else {
-    next(); // Continua para rotas públicas
+    next();
   }
 });
 
