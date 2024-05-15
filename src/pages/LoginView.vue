@@ -43,15 +43,21 @@ export default {
             this.$store.dispatch("login", {
                 email: this.email,
                 password: this.password,
+            }).then(() => {
+                this.$router.push('/');
+            }).catch(error => {
+                console.error("Erro ao fazer login:", error);
             });
-            this.$router.push('/');
         },
         createAcc() {
             this.$store.dispatch("create", {
                 email: this.email,
                 password: this.password,
+            }).then(() => {
+                alert("Conta criada com sucesso!");
+            }).catch(error => {
+                console.error("Erro ao criar conta:", error);
             });
-            alert("Conta criada com sucesso!");
         },
     },
 };

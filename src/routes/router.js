@@ -18,32 +18,38 @@ const routes = [
     },
     {
         path: '/',
-        component: HomePage
+        component: HomePage,
+        meta: { requiresAuth: true }
     },
     {
         path: '/calendario',
-        component: CalendarioPage
+        component: CalendarioPage,
+        meta: { requiresAuth: true }
     },
     {
         path: '/cursos',
-        component: CursosPageVue
+        component: CursosPageVue,
+        meta: { requiresAuth: true }
     },
     {
         path: '/library',
-        component: BibliotecaPageVue
+        component: BibliotecaPageVue,
+        meta: { requiresAuth: true }
     },
     {
         path: '/forum',
-        component: ForumPageVue
+        component: ForumPageVue,
+        meta: { requiresAuth: true }
     },
     {
         path: '/users',
-        component: UsuariosPageVue
+        component: UsuariosPageVue,
+        meta: { requiresAuth: true }
     },
 ]
 
 const router = new VueRouter({
     routes
-})
+});
 
 export default router
