@@ -3,8 +3,9 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import router from './routes/router'
 import Vuex from 'vuex'
-import { auth } from './config'
+import { auth, db } from './config'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
+import { collection, addDoc } from 'firebase/firestore'
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
@@ -12,6 +13,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     user: null,
+    eventos: []
   },
   mutations: {
     setUser(state, payload) {
@@ -37,7 +39,7 @@ const store = new Vuex.Store({
         return new Promise((resolve, reject) => {
             signInWithEmailAndPassword(auth, email, password)
             .then((result) => {
-                console.log("usuário logado!", result);
+                console.log("usuário logado!", this.state.user);
                 commit("setUser", result.user);
                 resolve(result);
             })
@@ -56,6 +58,20 @@ const store = new Vuex.Store({
           console.log("Método de autenticação chamado")
         }
       });
+    },
+    //eslint-disable-next-line no-unused-vars
+    async sendEvent({ commit }, payload) {
+      console.log("chamada da action de sendEvent")
+      const evento = payload;
+      try{
+        const DocRef = await addDoc(collection(db, "eventos"), { 
+          ...evento,
+        });
+        console.log("Document written with ID: ", DocRef.id);
+      }catch(error){
+        console.error("Erro ao enviar evento:", error);
+        alert(error);
+      }
     },
   },
   getters: {
