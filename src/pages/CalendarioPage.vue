@@ -242,6 +242,10 @@
   </template>
   
   <script>
+  //eslint-disable-next-line no-unused-vars
+  import { collection, getDoc, getDocs } from 'firebase/firestore';
+  import { db } from '../config';
+
   export default {
     data() {
       return {
@@ -296,18 +300,41 @@
           this.drawer = false
         },
       },
+    mounted() {
+      this.getEventos();
+    },
     methods: {
-      adicionarEvento() {
-        this.eventos.push({
-          index: this.eventos.length + 1,
-          name: this.novoEvento.name,
-          date: this.novoEvento.date,
-          inicio: this.novoEvento.inicio,
-          fim: this.novoEvento.fim,
-          desc: this.novoEvento.desc
-        });
-        this.novoEvento = { name: '', date: null, inicio: '', fim: '', desc: '' };
-        this.dialog = false;
+      async adicionarEvento() {
+      try {
+          await this.$store.dispatch('sendEvent', {
+            index: this.eventos.length + 1,
+            name: this.novoEvento.name,
+            date: this.novoEvento.date,
+            inicio: this.novoEvento.inicio,
+            fim: this.novoEvento.fim,
+            desc: this.novoEvento.desc
+          });
+
+          await this.getEventos();
+
+          this.novoEvento = { name: '', date: null, inicio: '', fim: '', desc: '' };
+          this.dialog = false;
+        } catch(error) {
+          console.log("Erro ao adcionar evento", error);
+        }
+      },
+      async getEventos() {
+        try {
+          const querySnapshot = await getDocs(collection(db, "eventos"));
+          this.eventos = querySnapshot.docs.map((doc) => {
+            return {
+              id: doc.id,
+              ...doc.data(),
+            };
+          });
+        } catch(error) {
+          console.error("Erro ao obter eventos", error);
+        }
       },
       excluirEvento() {
         if (confirm("Tem certeza que deseja excluir este evento?")) {
@@ -338,6 +365,9 @@
       },
       goTo(path) {
         this.$router.push(path)
+      },
+      created() {
+        this.getEventos();
       }
     }
   }
