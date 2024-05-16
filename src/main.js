@@ -25,6 +25,7 @@ const store = new Vuex.Store({
       createUserWithEmailAndPassword(auth, email, password)
         .then((result) => {
           console.log("usuário criado!", result);
+          alert("Conta criada com sucesso!");
         })
         .catch((error) => {
           alert(error);
@@ -32,7 +33,7 @@ const store = new Vuex.Store({
     },
     //eslint-disable-next-line no-unused-vars
     login({ commit }, payload) {
-        const { email, password } = payload;
+        const { email, password } = payload; 
         return new Promise((resolve, reject) => {
             signInWithEmailAndPassword(auth, email, password)
             .then((result) => {

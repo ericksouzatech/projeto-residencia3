@@ -55,7 +55,7 @@ export default {
                 email: this.email,
                 password: this.password,
             }).then(() => {
-                alert("Conta criada com sucesso!");
+                // alert("Conta criada com sucesso!");
             }).catch(error => {
                 console.error("Erro ao criar conta:", error);
             });
