@@ -5,7 +5,8 @@ import router from './routes/router'
 import Vuex from 'vuex'
 import { auth, db } from './config'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
-import { collection, addDoc } from 'firebase/firestore'
+//eslint-disable-next-line no-unused-vars
+import { collection, addDoc, deleteDoc, updateDoc, doc } from 'firebase/firestore'
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
@@ -70,6 +71,31 @@ const store = new Vuex.Store({
         console.log("Document written with ID: ", DocRef.id);
       }catch(error){
         console.error("Erro ao enviar evento:", error);
+        alert(error);
+      }
+    },
+    //eslint-disable-next-line no-unused-vars
+    async deleteEvent({ commit }, payload) {
+      console.log("chamada da action de deleteEvent")
+      const eventoId = payload.id;
+      console.log(eventoId);
+      try{
+        await deleteDoc(doc(db, "eventos", eventoId));
+        console.log("Document deleted with ID: ", eventoId);
+      }catch(error){
+        console.error("Erro ao deletar evento:", error);
+        alert(error);
+      }
+    },
+    //eslint-disable-next-line no-unused-vars
+    async updateEvent({ commit }, payload) {
+      console.log("chamada da action de updateEvent");
+      const { id, ...dadosAtualizados } = payload; // Extrai o ID do evento e os dados atualizados do payload
+      try {
+        await updateDoc(doc(db, "eventos", id), dadosAtualizados); // Passa a referência do documento e os dados atualizados para a função updateDoc
+        console.log("Evento atualizado com sucesso");
+      } catch(error) {
+        console.error("Erro ao atualizar evento:", error);
         alert(error);
       }
     },

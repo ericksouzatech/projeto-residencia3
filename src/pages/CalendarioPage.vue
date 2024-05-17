@@ -242,8 +242,7 @@
   </template>
   
   <script>
-  //eslint-disable-next-line no-unused-vars
-  import { collection, getDoc, getDocs } from 'firebase/firestore';
+  import { collection, getDocs } from 'firebase/firestore';
   import { db } from '../config';
 
   export default {
@@ -255,6 +254,7 @@
         dialog: false,
         dialogEditar: false,
         indexEditado: -1,
+        eventoId: -1,
         drawer: false,
         group: null,
         headers: [
@@ -269,16 +269,7 @@
           { text: 'Horário de Término', value: 'fim', sortable: false },
           { text: 'Descrição', value: 'desc', sortable: false },
         ],
-        eventos: [
-          {
-            index: 1,
-            name: 'Residência 3',
-            date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-            inicio: 9,
-            fim: 11,
-            desc: 'Residência com a Beyond'
-          }
-        ],
+        eventos: [],
         novoEvento: { 
           name: '', 
           date: null, 
@@ -338,10 +329,12 @@
       },
       excluirEvento() {
         if (confirm("Tem certeza que deseja excluir este evento?")) {
-          this.eventos.splice(this.indexEditado, 1);
+          const eventoParaExcluir = this.eventos[this.indexEditado];
+          this.$store.dispatch('deleteEvent', eventoParaExcluir);
           this.dialogEditar = false;
           this.eventoEditando = { name: '', date: null, inicio: '', fim: '', desc: '' };
           this.indexEditado = -1;
+          this.getEventos();
         }
         else {
           this.dialogEditar = false;
@@ -353,11 +346,15 @@
         this.eventoEditando = { ...evento };
         this.dialogEditar = true;
         this.indexEditado = this.eventos.indexOf(evento);
+        this.eventoId = evento.id;
+        console.log(this.indexEditado);
       },
       salvarEdicao() {
-        this.eventos.splice(this.indexEditado, 1, { ...this.eventoEditando });
+        this.$store.dispatch('updateEvent', { ...this.eventoEditando, id: this.eventoId });
+        this.getEventos();
         this.dialogEditar = false;
         this.eventoEditando = { name: '', date: null, inicio: '', fim: '', desc: '' };
+        this.eventoId = -1;
       },
       cancelarEdicao() {
         this.dialogEditar = false; 
