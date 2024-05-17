@@ -264,7 +264,7 @@
             sortable: false,
             value: 'name',
           },
-          { text: 'Dia do evento', value: 'date', sortable: false },
+          { text: 'Dia do evento', value: 'date', sortable: true },
           { text: 'Horário de Início', value: 'inicio', sortable: false },
           { text: 'Horário de Término', value: 'fim', sortable: false },
           { text: 'Descrição', value: 'desc', sortable: false },
@@ -347,7 +347,6 @@
         this.dialogEditar = true;
         this.indexEditado = this.eventos.indexOf(evento);
         this.eventoId = evento.id;
-        console.log(this.indexEditado);
       },
       salvarEdicao() {
         this.$store.dispatch('updateEvent', { ...this.eventoEditando, id: this.eventoId });
