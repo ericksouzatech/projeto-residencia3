@@ -42,6 +42,9 @@
               <v-list-item>
                 <v-list-item-title @click="goTo('/library')">Biblioteca Digital</v-list-item-title>
               </v-list-item>
+              <div class="botaoLogoff">
+                <v-btn dark @click="logout()">Fazer logoff</v-btn>
+              </div>
             </v-list-item-group>
           </v-list>
         </v-navigation-drawer>
@@ -359,6 +362,11 @@
         this.dialogEditar = false; 
         this.eventoEditando = { name: '', date: null, inicio: '', fim: '', desc: '' }; 
       },
+      logout(){
+        if(confirm("Tem certeza que deseja sair?")){
+          this.$store.dispatch('logout');
+        }
+      },
       goTo(path) {
         this.$router.push(path)
       },
@@ -368,4 +376,10 @@
     }
   }
   </script>
+
+  <style>
+  .botaoLogoff {
+    margin-top: 600px;
+  }
+  </style>
   

@@ -54,11 +54,22 @@ const store = new Vuex.Store({
       auth.onAuthStateChanged(user => {
         if (user) {
           commit('setUser', user);
+          console.log("Usuário autenticado")
         } else {
           commit('setUser', null);
           console.log("Método de autenticação chamado")
         }
       });
+    },
+    async logout({ commit }) {
+      try{
+        await auth.signOut();
+        commit('setUser', null);
+        router.push('/login');
+      }
+      catch(error){
+        console.error(error);
+      }
     },
     //eslint-disable-next-line no-unused-vars
     async sendEvent({ commit }, payload) {
@@ -90,9 +101,9 @@ const store = new Vuex.Store({
     //eslint-disable-next-line no-unused-vars
     async updateEvent({ commit }, payload) {
       console.log("chamada da action de updateEvent");
-      const { id, ...dadosAtualizados } = payload; // Extrai o ID do evento e os dados atualizados do payload
+      const { id, ...dadosAtualizados } = payload;
       try {
-        await updateDoc(doc(db, "eventos", id), dadosAtualizados); // Passa a referência do documento e os dados atualizados para a função updateDoc
+        await updateDoc(doc(db, "eventos", id), dadosAtualizados);
         console.log("Evento atualizado com sucesso");
       } catch(error) {
         console.error("Erro ao atualizar evento:", error);
