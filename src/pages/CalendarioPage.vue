@@ -43,7 +43,7 @@
                 <v-list-item-title @click="goTo('/library')">Biblioteca Digital</v-list-item-title>
               </v-list-item>
               <div class="botaoLogoff">
-                <v-btn dark @click="logout()">Fazer logoff</v-btn>
+                <v-btn dark @click="logout()">Logout</v-btn>
               </div>
             </v-list-item-group>
           </v-list>
