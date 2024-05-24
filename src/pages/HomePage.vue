@@ -48,8 +48,8 @@
             </v-list-item-group>
           </v-list>
         </v-navigation-drawer>
-        <div>
-          Seja bem vindo!
+        <div class="boasVindas">
+          <h1>Seja Bem-Vindo!</h1>
         </div>
       </v-main>
     </v-app>    
@@ -80,3 +80,10 @@ export default {
     }
 }
 </script>
+
+<style>
+.boasVindas{
+  margin-top: 50px;
+  margin-left: 50px;
+}
+</style>
