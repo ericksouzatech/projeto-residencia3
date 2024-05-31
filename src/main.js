@@ -5,7 +5,6 @@ import router from './routes/router'
 import Vuex from 'vuex'
 import { auth, db } from './config'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
-//eslint-disable-next-line no-unused-vars
 import { collection, addDoc, deleteDoc, updateDoc, doc } from 'firebase/firestore'
 
 Vue.config.productionTip = false
