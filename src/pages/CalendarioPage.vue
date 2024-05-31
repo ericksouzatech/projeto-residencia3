@@ -161,7 +161,8 @@
           :items="eventos"
           :items-per-page="5"
           class="elevation-1"
-          @click:row="editarEvento">
+          @click:row="editarEvento"
+          :loading="loading">
         </v-data-table>
         <v-dialog v-model="dialogEditar" max-width="500px">
           <v-card>
@@ -245,18 +246,19 @@
   </template>
   
   <script>
-  import { collection, getDocs } from 'firebase/firestore';
-  import { db } from '../config';
+  // import { collection, getDocs } from 'firebase/firestore';
+  // import { db } from '../config';
+  import api from '../axiosConfig.js';
 
   export default {
     data() {
       return {
+        loading: false,
         date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
         menu: false,
         menu1: false,
         dialog: false,
         dialogEditar: false,
-        indexEditado: -1,
         eventoId: -1,
         drawer: false,
         group: null,
@@ -295,49 +297,41 @@
         },
       },
     mounted() {
-      this.getEventos();
+      this.fetchEventos();
     },
     methods: {
       async adicionarEvento() {
-      try {
-          await this.$store.dispatch('sendEvent', {
-            index: this.eventos.length + 1,
-            name: this.novoEvento.name,
-            date: this.novoEvento.date,
-            inicio: this.novoEvento.inicio,
-            fim: this.novoEvento.fim,
-            desc: this.novoEvento.desc
-          });
-
-          await this.getEventos();
-
+        try {
+          await api.post('/eventos', this.novoEvento);
+          this.fetchEventos();
           this.novoEvento = { name: '', date: null, inicio: '', fim: '', desc: '' };
           this.dialog = false;
-        } catch(error) {
-          console.log("Erro ao adcionar evento", error);
+        } catch (error) {
+          console.error('Erro ao adicionar evento', error);
         }
+        this.novoEvento = { name: '', date: null, inicio: '', fim: '', desc: '' };
+        this.dialog = false;
       },
-      async getEventos() {
+      async fetchEventos() {
+        this.loading = true;
         try {
-          const querySnapshot = await getDocs(collection(db, "eventos"));
-          this.eventos = querySnapshot.docs.map((doc) => {
-            return {
-              id: doc.id,
-              ...doc.data(),
-            };
-          });
-        } catch(error) {
-          console.error("Erro ao obter eventos", error);
+          const response = await api.get('/eventos');
+          this.eventos = response.data;
+          this.loading = false;
+        } catch (error) {
+          console.error("Erro ao buscar eventos:", error);
         }
       },
-      excluirEvento() {
+      async excluirEvento() {
         if (confirm("Tem certeza que deseja excluir este evento?")) {
-          const eventoParaExcluir = this.eventos[this.indexEditado];
-          this.$store.dispatch('deleteEvent', eventoParaExcluir);
+          try{
+          await api.delete('/eventos', { data: { id: this.eventoId } });
+          this.fetchEventos();
           this.dialogEditar = false;
           this.eventoEditando = { name: '', date: null, inicio: '', fim: '', desc: '' };
-          this.indexEditado = -1;
-          this.getEventos();
+          } catch (error) {
+            console.error("Erro ao excluir evento: ", error);
+          }
         }
         else {
           this.dialogEditar = false;
@@ -351,12 +345,15 @@
         this.indexEditado = this.eventos.indexOf(evento);
         this.eventoId = evento.id;
       },
-      salvarEdicao() {
-        this.$store.dispatch('updateEvent', { ...this.eventoEditando, id: this.eventoId });
-        this.getEventos();
-        this.dialogEditar = false;
-        this.eventoEditando = { name: '', date: null, inicio: '', fim: '', desc: '' };
-        this.eventoId = -1;
+      async salvarEdicao() {
+        try{
+          await api.put('/eventos', { ...this.eventoEditando, id: this.eventoId });
+          this.fetchEventos();
+          this.dialogEditar = false;
+          this.eventoEditando = { name: '', date: null, inicio: '', fim: '', desc: '' };
+        }catch(error){
+          console.error("Erro ao salvar o evento: ", error);
+        }
       },
       cancelarEdicao() {
         this.dialogEditar = false; 
@@ -371,7 +368,7 @@
         this.$router.push(path)
       },
       created() {
-        this.getEventos();
+        this.fetchEventos();
       }
     }
   }
